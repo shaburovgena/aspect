@@ -102,6 +102,7 @@
 
         },
         created() {
+
             addHandler(data => {
                 if (data.objectType === 'USER') {
                     switch (data.eventType) {
@@ -125,7 +126,7 @@
         },
         beforeMount() {
             if (!this.profile) {
-                this.$router.replace('/auth')
+                this.$router.replace('/')
             }
         }
     }

@@ -11,7 +11,9 @@ export function connect() {
     stompClient.debug = () => {
     }
     stompClient.connect({}, frame => {
+
         stompClient.subscribe('/topic/activity', user => {
+            console.log(frame)
             handlers.forEach(handler => handler(JSON.parse(user.body)))
         })
     })

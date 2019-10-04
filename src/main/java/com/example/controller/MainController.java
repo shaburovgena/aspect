@@ -46,7 +46,7 @@ public class MainController {
             @AuthenticationPrincipal User user
     ) throws JsonProcessingException {
         HashMap<Object, Object> data = new HashMap<>();
-        if (user != null && user.getActivationCode() == null) {
+        if (user != null ) {
             model.addAttribute("profile", profileWriter.writeValueAsString(user));
             model.addAttribute("users", usersWriter.writeValueAsString(userRepo.findAll()));
             data.put("message", "Hello");

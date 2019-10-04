@@ -9,6 +9,7 @@
 
 <script>
     import { mapActions } from 'vuex'
+    import { sendUser } from 'util/ws'
     export default {
         props: ['userAttr'],
         data() {
@@ -34,6 +35,7 @@
                     this.updateUserAction(user)
                 } else {
                     console.log(user.username)
+                    sendUser({id: this.id, username: this.username})
                     this.addUserAction(user)
                 }
                 this.username = ''

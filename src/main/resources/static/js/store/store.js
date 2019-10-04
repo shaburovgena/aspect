@@ -3,6 +3,7 @@ import Vuex from 'vuex'
 import usersApi from 'api/users'
 import 'core-js/stable'
 import 'regenerator-runtime/runtime'
+
 Vue.use(Vuex)
 export default new Vuex.Store({
 
@@ -23,7 +24,7 @@ export default new Vuex.Store({
             ]
         },
         updateUserMutation(state, user) {
-            const updateIndex = state.users.findIndex(item => item.id === user.id)
+            const updateIndex = this.state.users.findIndex(item => item.id === user.id)
             state.users = [
                 ...state.users.slice(0, updateIndex),
                 user,
@@ -31,7 +32,7 @@ export default new Vuex.Store({
             ]
         },
         removeUserMutation(state, user) {
-            const deletionIndex = state.users.findIndex(item => item.id === user.id)
+            const deletionIndex = this.state.users.findIndex(item => item.id === user.id)
             if (deletionIndex > -1) {
                 state.users = [
                     ...state.users.slice(0, deletionIndex),
@@ -44,8 +45,7 @@ export default new Vuex.Store({
         async  addUserAction({commit}, user) {
             const result = await usersApi.add(user)
             const data = await result.json()
-            const index = state.users.findIndex(item => item.id === data.id)
-
+            const index = this.state.users.findIndex(item => item.id === data.id)
             if (index > -1) {
                 commit('updateUserMutation', data)
             } else {

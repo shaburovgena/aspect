@@ -14,7 +14,7 @@ module.exports = {
         compress: true,
         port: 8001,
         allowedHosts: [
-            'localhost:9000'
+            'localhost:9090'
         ],
         //
         stats: 'errors-only',
