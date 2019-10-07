@@ -20,19 +20,20 @@ import java.util.UUID;
 public class UserService implements UserDetailsService {
 
     //Аналог конструктора с переданным параметром userRepo
-    @Autowired
-    private UserRepo userRepo;
+    private final UserRepo userRepo;
 
-    @Autowired
-    private MailSender mailSender;
+    private final MailSender mailSender;
 
-    @Autowired
-    private PasswordEncoder passwordEncoder;
+    private final PasswordEncoder passwordEncoder;
 
     @Value("${server.add}")
     private String serverAddress;
 
-    public UserService() {
+    @Autowired
+    public UserService(UserRepo userRepo, MailSender mailSender, PasswordEncoder passwordEncoder) {
+        this.userRepo = userRepo;
+        this.mailSender = mailSender;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Override
@@ -50,8 +51,7 @@ public class UserService implements UserDetailsService {
         User userFromDb = userRepo.findByUsername(user.getUsername());
         System.out.println(user.getUsername());
         if (userFromDb != null) {
-            System.out.println(userFromDb.getUsername() + " found");
-            return user;
+            return null;
         }
 
         //Указываем что пользователь активен
@@ -71,7 +71,6 @@ public class UserService implements UserDetailsService {
         sendMessage(user);
         //Сохраняем пользователя в базе
         userRepo.save(user);
-        System.out.println(user.getEmail());
         //Если поле mail не пустое отправить код активации
         sendMessage(user);
         return user;
@@ -99,7 +98,7 @@ public class UserService implements UserDetailsService {
     }
 
 
-    public User updateUser(User user, String password, String email, String fullName, String address, String phone) {
+    public User updateUser(User user,String username, String password, String email, String fullName, String address, String phone) {
         String currentUserEmail = user.getEmail();
 
         boolean isEmailChanged = (email != null && !email.equals(currentUserEmail) ||
@@ -112,7 +111,9 @@ public class UserService implements UserDetailsService {
                 sendMessage(user);
             }
         }
-
+        if (!StringUtils.isEmpty(username)) {
+            user.setUsername(username);
+        }
         if (!StringUtils.isEmpty(password)) {
             user.setPassword(passwordEncoder.encode(password));
         }

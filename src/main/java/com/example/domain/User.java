@@ -135,7 +135,7 @@ public class User implements Serializable, UserDetails {
         this.password = password;
     }
 
-    public boolean isActive() {
+    private boolean isActive() {
         return active;
     }
 
@@ -143,7 +143,7 @@ public class User implements Serializable, UserDetails {
         this.active = active;
     }
 
-    public Set<Role> getRoles() {
+    private Set<Role> getRoles() {
         return roles;
     }
 

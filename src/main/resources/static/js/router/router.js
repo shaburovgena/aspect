@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import UserList from 'components/UserList.vue'
+import UserList from 'pages/UserList.vue'
 import Profile from 'pages/Profile.vue'
 
 Vue.use(VueRouter)

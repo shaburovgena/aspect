@@ -34,7 +34,7 @@ public class MainController {
                 .setConfig(mapper.getSerializationConfig());
 
         this.profileWriter = objectMapper
-                .writerWithView(Views.IdName.class);
+                .writerWithView(Views.FullProfile.class);
  this.usersWriter = objectMapper
                 .writerWithView(Views.FullProfile.class);
 
@@ -46,7 +46,7 @@ public class MainController {
             @AuthenticationPrincipal User user
     ) throws JsonProcessingException {
         HashMap<Object, Object> data = new HashMap<>();
-        if (user != null ) {
+        if (user != null) {
             model.addAttribute("profile", profileWriter.writeValueAsString(user));
             model.addAttribute("users", usersWriter.writeValueAsString(userRepo.findAll()));
             data.put("message", "Hello");

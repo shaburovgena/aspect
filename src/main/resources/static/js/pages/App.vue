@@ -11,7 +11,7 @@
             </v-btn>
             <v-spacer></v-spacer>
             <div v-if="profile">
-                <v-btn v-if="profile" icon :disabled="$route.path === '/profile'" @click="showProfile">
+                <v-btn  icon :disabled="$route.path === '/profile'" @click="showProfile">
                     {{profile.username}}
                 </v-btn>
                 <v-btn icon href="/logout">
@@ -28,18 +28,19 @@
             </div>
         </v-app-bar>
 
+        <v-content v-if="!profile">
+            <v-container grid-list-lg mt-12>
+                <v-layout align-start justify-end row wrap>
+                    <v-flex lg3 d-flex v-if="isLogin">
+                        <login-page/>
+                    </v-flex>
+                    <v-flex lg3 d-flex v-if="isRegister">
+                        <register-page/>
+                    </v-flex>
 
-        <v-container grid-list-lg mt-12>
-            <v-layout align-start justify-end row wrap>
-                <v-flex lg3 d-flex v-if="isLogin && !profile">
-                    <login-page/>
-                </v-flex>
-                <v-flex lg3 d-flex v-if="isRegister">
-                    <register-page/>
-                </v-flex>
-
-            </v-layout>
-        </v-container>
+                </v-layout>
+            </v-container>
+        </v-content>
         <v-content v-if="profile">
             <router-view></router-view>
         </v-content>

@@ -4,16 +4,16 @@
             <v-flex :xs6="!$vuetify.breakpoint.xsOnly">
                 <div class="title mb-3">User profile</div>
                 <v-layout row justify-space-between>
-                    <!--<v-flex>-->
-                    <!--<v-img :src="profile.userpic"></v-img>-->
-                    <!--</v-flex>-->
+                    <v-flex>
+                    <v-img :src="profile.userpic"></v-img>
+                    </v-flex>
                     <v-flex class="px-1">
                         <v-layout column>
-                            <v-flex>{{profile.username}}</v-flex>
-                            <!--<v-flex>{{profile.address}}</v-flex>-->
-                            <!--<v-flex>{{profile.phone}}</v-flex>-->
-                            <!--<v-flex>{{profile.email}}</v-flex>-->
-                            <!--<v-flex>{{profile.lastVisit}}</v-flex>-->
+                            <span>{{profile.username}}</span>
+                            <span>{{profile.email}}</span>
+                            <span>{{profile.fullName}}</span>
+                            <span>{{profile.address}}</span>
+                            <span>{{profile.phone}}</span>
                         </v-layout>
                     </v-flex>
                 </v-layout>

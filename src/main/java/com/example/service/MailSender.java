@@ -11,8 +11,12 @@ import org.springframework.stereotype.Service;
 @Service
 public class MailSender {
 
+    private final JavaMailSender mailSender;
+
     @Autowired
-    private JavaMailSender mailSender;
+    public MailSender(JavaMailSender mailSender) {
+        this.mailSender = mailSender;
+    }
 
     //Метод будет асинхронно запущен в отдельном потоке
     @Async

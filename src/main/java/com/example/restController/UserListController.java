@@ -7,7 +7,6 @@ import com.example.dto.EventType;
 import com.example.dto.ObjectType;
 import com.example.repos.UserRepo;
 import com.example.service.UserService;
-import org.jsoup.nodes.Element;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,8 +19,8 @@ public class UserListController {
 
 
     private final BiConsumer<EventType, User> wsSender;
-    private UserRepo userRepo;
-    private UserService userService;
+    private final UserRepo userRepo;
+    private final UserService userService;
 
     @Autowired
     public UserListController(WsSender wsSender, UserRepo userRepo, UserService userService) {
@@ -55,10 +54,8 @@ public class UserListController {
             @PathVariable("id") User userFromDb,
             @RequestBody User user
     ) {
-        //Скопирует все данные из user в userFromDb, кроме id
-//        BeanUtils.copyProperties(user, userFromDb, "id");
-//        User updatedUser = userRepo.save(userFromDb);
-        User updatedUser = userService.updateUser(userFromDb, user.getPassword(), user.getEmail(),
+
+        User updatedUser = userService.updateUser(userFromDb,user.getUsername(), user.getPassword(), user.getEmail(),
                 user.getFullName(),user.getAddress(),user.getPhone());
         wsSender.accept(EventType.UPDATE, updatedUser);
         return updatedUser;
@@ -71,8 +68,4 @@ public class UserListController {
     }
 
 
-
-    private String getContent(Element element) {
-        return element == null ? "" : element.attr("content");
-    }
 }

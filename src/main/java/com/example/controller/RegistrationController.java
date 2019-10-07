@@ -15,13 +15,13 @@ import java.util.HashMap;
 public class RegistrationController {
     @Value("${spring.profiles.active}")
     private String profile;
-    @Autowired
-    private UserService userService;
+    private final UserService userService;
 
     @Autowired
     public RegistrationController(
             UserService userService) {
         this.userService = userService;
+
 
     }
     @PostMapping("/registration")
