@@ -2,6 +2,7 @@ package com.example.domain;
 
 import com.example.dto.EventType;
 import com.example.dto.ObjectType;
+import com.example.dto.WsEventDto;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
@@ -12,12 +13,12 @@ import java.util.function.BiConsumer;
 
 
 @Component
-public class WcSender {
+public class WsSender {
     private final SimpMessagingTemplate template;
     private final ObjectMapper mapper;
 
 
-    public WcSender(SimpMessagingTemplate template, ObjectMapper mapper) {
+    public WsSender(SimpMessagingTemplate template, ObjectMapper mapper) {
         this.template = template;
         this.mapper = mapper;
     }
@@ -34,7 +35,10 @@ public class WcSender {
             } catch (JsonProcessingException e) {
                 throw new RuntimeException(e);
             }
-            template.convertAndSend("/topic/activity", value);
+            template.convertAndSend(
+                    "/topic/activity",
+                    new WsEventDto(objectType, eventType, value)
+            );
         };
     }
 }

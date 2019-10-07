@@ -1,11 +1,13 @@
 <template>
-    <v-layout align-space-around justify-start column>
+    <v-content>
+        <v-container  align-space-around justify-start column>
         <user-form :userAttr="user" />
         <user-row v-for="user in sortedUsers"
                      :key="user.id"
                      :user="user"
                      :editUser="editUser" />
-    </v-layout>
+        </v-container>
+    </v-content>
 </template>
 
 <script>

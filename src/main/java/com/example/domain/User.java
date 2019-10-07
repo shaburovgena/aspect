@@ -1,13 +1,11 @@
 package com.example.domain;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonView;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.Set;
 
@@ -23,18 +21,21 @@ public class User implements Serializable, UserDetails {
     private String username;
     @JsonView(Views.IdName.class)
     private String userpic;
+    @JsonView(Views.FullProfile.class)
     private String email;
     @JsonView(Views.FullProfile.class)
     private String phone;
     @JsonView(Views.FullProfile.class)
     private String address;
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
-    @JsonView(Views.FullProfile.class)
-    private LocalDateTime lastVisit;
+//    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
+//    @JsonView(Views.FullProfile.class)
+//    private LocalDateTime lastVisit;
     @JsonView(Views.FullProfilePassw.class)
     private String activationCode;
     @JsonView(Views.FullProfilePassw.class)
     private String password;
+    @JsonView(Views.FullProfile.class)
+    private String fullName;
     @JsonView(Views.FullProfilePassw.class)
     private boolean active;
 
@@ -118,14 +119,6 @@ public class User implements Serializable, UserDetails {
         this.address = address;
     }
 
-    public LocalDateTime getLastVisit() {
-        return lastVisit;
-    }
-
-    public void setLastVisit(LocalDateTime lastVisit) {
-        this.lastVisit = lastVisit;
-    }
-
     public String getActivationCode() {
         return activationCode;
     }
@@ -156,5 +149,13 @@ public class User implements Serializable, UserDetails {
 
     public void setRoles(Set<Role> roles) {
         this.roles = roles;
+    }
+
+    public String getFullName() {
+        return fullName;
+    }
+
+    public void setFullName(String fullName) {
+        this.fullName = fullName;
     }
 }

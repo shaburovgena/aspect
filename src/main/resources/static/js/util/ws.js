@@ -1,5 +1,5 @@
 import SockJS from 'sockjs-client'
-import {Stomp} from '@stomp/stompjs'
+import { Stomp } from '@stomp/stompjs'
 
 
 let stompClient = null
@@ -13,7 +13,6 @@ export function connect() {
     stompClient.connect({}, frame => {
 
         stompClient.subscribe('/topic/activity', user => {
-            console.log(frame)
             handlers.forEach(handler => handler(JSON.parse(user.body)))
         })
     })

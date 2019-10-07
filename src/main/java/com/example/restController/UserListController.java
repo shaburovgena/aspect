@@ -2,18 +2,15 @@ package com.example.restController;
 
 import com.example.domain.User;
 import com.example.domain.Views;
-import com.example.domain.WcSender;
+import com.example.domain.WsSender;
 import com.example.dto.EventType;
 import com.example.dto.ObjectType;
 import com.example.repos.UserRepo;
+import com.example.service.UserService;
 import org.jsoup.nodes.Element;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.messaging.handler.annotation.MessageMapping;
-import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.function.BiConsumer;
 
@@ -22,13 +19,15 @@ import java.util.function.BiConsumer;
 public class UserListController {
 
 
-    private final BiConsumer<EventType, User> wcSender;
+    private final BiConsumer<EventType, User> wsSender;
     private UserRepo userRepo;
+    private UserService userService;
 
     @Autowired
-    public UserListController(WcSender wcSender, UserRepo userRepo) {
-        this.wcSender = wcSender.getSender(ObjectType.USER, Views.IdName.class);
+    public UserListController(WsSender wsSender, UserRepo userRepo, UserService userService) {
+        this.wsSender = wsSender.getSender(ObjectType.USER, Views.FullProfile.class);
         this.userRepo = userRepo;
+        this.userService = userService;
     }
 
 
@@ -44,11 +43,10 @@ public class UserListController {
 
 
     @PostMapping
-    public User create(@RequestBody User user)  {
-        user.setLastVisit(LocalDateTime.now());
-        User updatedUser = userRepo.save(user);
-        wcSender.accept(EventType.CREATE, updatedUser);
-        System.out.println(user.getId());
+    public User create(@RequestBody User user) {
+        User updatedUser = userService.addUser(user);
+//        User updatedUser = userRepo.save(user);
+        wsSender.accept(EventType.CREATE, updatedUser);
         return updatedUser;
     }
 
@@ -58,24 +56,22 @@ public class UserListController {
             @RequestBody User user
     ) {
         //Скопирует все данные из user в userFromDb, кроме id
-        BeanUtils.copyProperties(user, userFromDb, "id");
-        User updatedUser = userRepo.save(userFromDb);
-        wcSender.accept(EventType.UPDATE, updatedUser);
+//        BeanUtils.copyProperties(user, userFromDb, "id");
+//        User updatedUser = userRepo.save(userFromDb);
+        User updatedUser = userService.updateUser(userFromDb, user.getPassword(), user.getEmail(),
+                user.getFullName(),user.getAddress(),user.getPhone());
+        wsSender.accept(EventType.UPDATE, updatedUser);
         return updatedUser;
     }
 
     @DeleteMapping("{id}")
     public void delete(@PathVariable("id") User user) {
         userRepo.delete(user);
-        wcSender.accept(EventType.REMOVE, user);
+        wsSender.accept(EventType.REMOVE, user);
     }
 
 
-@MessageMapping("/changeUser")
-@SendTo("topic/acivity")
-public User user (User user){
-        return userRepo.save(user);
-}
+
     private String getContent(Element element) {
         return element == null ? "" : element.attr("content");
     }

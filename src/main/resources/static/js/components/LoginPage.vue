@@ -9,14 +9,12 @@
                             placeholder="Username"
                             v-model="checkUsername"
                             :rules="[usernameEmpty]"
-                            @keyup.enter="submit"
-                    />
+                            @keyup.enter="submit"></v-text-field>
                     <v-text-field
                             name="password"
                             solo type="password"
                             placeholder="Password"
-                            @keyup.enter="submit"
-                    />
+                            @keyup.enter="submit"></v-text-field>
                 </v-layout>
             </v-content>
             <v-content>
@@ -43,7 +41,7 @@
         },
         computed: {
             usernameEmpty() {
-                return v => !!v || 'Enter a username'
+                return v => !!v || 'Enter username'
             }
         }
     }

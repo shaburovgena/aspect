@@ -11,7 +11,9 @@
             </v-btn>
             <v-spacer></v-spacer>
             <div v-if="profile">
-                <v-btn v-if="profile" icon :disabled="$route.path === '/profile'" @click="showProfile">{{profile.username}}</v-btn>
+                <v-btn v-if="profile" icon :disabled="$route.path === '/profile'" @click="showProfile">
+                    {{profile.username}}
+                </v-btn>
                 <v-btn icon href="/logout">
                     <v-icon>{{logoutBtn}}</v-icon>
                 </v-btn>
@@ -38,10 +40,7 @@
 
             </v-layout>
         </v-container>
-
-        <v-content>
-
-
+        <v-content v-if="profile">
             <router-view></router-view>
         </v-content>
     </v-app>
@@ -56,11 +55,11 @@
     import LoginPage from '../components/LoginPage.vue'
     import RegisterPage from '../components/RegisterPage.vue'
     import {mapMutations, mapState} from "vuex";
-    import { addHandler } from 'util/ws'
+    import {addHandler} from 'util/ws'
 
     export default {
         computed: mapState(['profile']),
-        components: { LoginPage, RegisterPage },
+        components: {LoginPage, RegisterPage},
         data() {
             return {
                 // profile: profile,

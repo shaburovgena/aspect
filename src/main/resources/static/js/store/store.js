@@ -24,7 +24,7 @@ export default new Vuex.Store({
             ]
         },
         updateUserMutation(state, user) {
-            const updateIndex = this.state.users.findIndex(item => item.id === user.id)
+            const updateIndex = state.users.findIndex(item => item.id === user.id)
             state.users = [
                 ...state.users.slice(0, updateIndex),
                 user,
@@ -32,7 +32,7 @@ export default new Vuex.Store({
             ]
         },
         removeUserMutation(state, user) {
-            const deletionIndex = this.state.users.findIndex(item => item.id === user.id)
+            const deletionIndex = state.users.findIndex(item => item.id === user.id)
             if (deletionIndex > -1) {
                 state.users = [
                     ...state.users.slice(0, deletionIndex),

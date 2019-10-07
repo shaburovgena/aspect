@@ -36,7 +36,7 @@ public class MainController {
         this.profileWriter = objectMapper
                 .writerWithView(Views.IdName.class);
  this.usersWriter = objectMapper
-                .writerWithView(Views.IdName.class);
+                .writerWithView(Views.FullProfile.class);
 
     }
 

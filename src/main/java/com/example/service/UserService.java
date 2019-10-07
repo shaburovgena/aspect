@@ -1,5 +1,8 @@
 package com.example.service;
 
+import com.example.domain.Role;
+import com.example.domain.User;
+import com.example.repos.UserRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -8,12 +11,9 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
-import com.example.domain.Role;
-import com.example.domain.User;
-import com.example.repos.UserRepo;
 
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.Collections;
+import java.util.UUID;
 
 //Класс будет просканирован как компонент Spring и помещен в контекст приложения
 @Service
@@ -48,8 +48,11 @@ public class UserService implements UserDetailsService {
 
     public User addUser(User user) {
         User userFromDb = userRepo.findByUsername(user.getUsername());
-
-        if (userFromDb != null) return user;
+        System.out.println(user.getUsername());
+        if (userFromDb != null) {
+            System.out.println(userFromDb.getUsername() + " found");
+            return user;
+        }
 
         //Указываем что пользователь активен
         user.setActive(true);
@@ -57,24 +60,21 @@ public class UserService implements UserDetailsService {
         //Устанавливаем роль УЗ USER через Set так как ролей может быть несколько
         user.setRoles(Collections.singleton(Role.USER));
 
-        //Уязвимость
-        if (user.getUsername().equalsIgnoreCase("admin")) {
-            user.setRoles(Collections.singleton(Role.ADMIN));
-        }
+
 
         //Генерируем код активации
         String activationCode = UUID.randomUUID().toString();
         user.setActivationCode(activationCode);
-        System.out.println(activationCode);
 
         //Шифруем пароль
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         sendMessage(user);
         //Сохраняем пользователя в базе
         userRepo.save(user);
+        System.out.println(user.getEmail());
         //Если поле mail не пустое отправить код активации
-//        sendMessage(user);
-        return null;
+        sendMessage(user);
+        return user;
     }
 
     private void sendMessage(User user) {
@@ -98,56 +98,37 @@ public class UserService implements UserDetailsService {
         return true;
     }
 
-    public List<User> findAll() {
-        return userRepo.findAll();
-    }
 
-    public void saveUser(String username, User user, Map<String, String> form) {
-        //Изменяем имя пользователя
-        user.setUsername(username);
-
-        //Получаем все роли из Enum в коллекцию, преобразуем коллекцию в Set
-        Set<String> roles = Arrays.stream(Role.values())
-                .map(Role::name)
-                .collect(Collectors.toSet());
-
-        //Удаляем существующие роли пользователя
-        user.getRoles().clear();
-
-        //Устанавливаем роли отмеченные чекбоксами полученные в form
-        for (String key : form.keySet()) {
-            if (roles.contains(key)) {
-                user.getRoles().add(Role.valueOf(key));
-            }
-        }
-
-        //Сохраняем пользователя в базе с помощью черной магии
-        //Spring не создает нового пользователя, а апдейтит существующего
-        userRepo.save(user);
-
-    }
-
-    public void updateUser(User user, String password, String email) {
+    public User updateUser(User user, String password, String email, String fullName, String address, String phone) {
         String currentUserEmail = user.getEmail();
 
         boolean isEmailChanged = (email != null && !email.equals(currentUserEmail) ||
                 currentUserEmail != null && !currentUserEmail.equals(email));
 
         if (isEmailChanged) {
-            user.setEmail(email);
             if (!StringUtils.isEmpty(email)) {
+                user.setEmail(email);
                 user.setActivationCode(UUID.randomUUID().toString());
-                System.out.println();
+                sendMessage(user);
             }
         }
 
         if (!StringUtils.isEmpty(password)) {
-            user.setPassword(password);
+            user.setPassword(passwordEncoder.encode(password));
         }
+        if (!StringUtils.isEmpty(fullName)) {
+            user.setFullName(fullName);
+        }
+        if (!StringUtils.isEmpty(address)) {
+            user.setAddress(address);
+        }
+        if (!StringUtils.isEmpty(phone)) {
+            user.setPhone(phone);
+        }
+
         //Если менялся адрес почты перевысылаем код активации
         userRepo.save(user);
-        if (isEmailChanged) {
-            sendMessage(user);
-        }
+
+        return user;
     }
 }
