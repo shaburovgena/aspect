@@ -2,7 +2,7 @@
     <v-app>
         <v-app-bar app>
             <v-btn v-if="profile" icon :disabled="$route.path === '/'" @click="showUsers">
-                <v-icon>{{homeBtn}}</v-icon>
+                <v-icon>{{listBtn}}</v-icon>
             </v-btn>
             <v-spacer></v-spacer>
             <v-toolbar-title>Aspect</v-toolbar-title>
@@ -11,7 +11,7 @@
             </v-btn>
             <v-spacer></v-spacer>
             <div v-if="profile">
-                <v-btn  icon :disabled="$route.path === '/profile'" @click="showProfile">
+                <v-btn icon :disabled="$route.path === '/profile'" @click="showProfile">
                     {{profile.username}}
                 </v-btn>
                 <v-btn icon href="/logout">
@@ -50,7 +50,7 @@
 <script>
     import {mdiLogout} from '@mdi/js'
     import {mdiLogin} from '@mdi/js'
-    import {mdiHome} from '@mdi/js'
+    import {mdiFormatListBulleted} from '@mdi/js'
     import {mdiRefresh} from '@mdi/js'
     import {mdiAccountPlusOutline} from '@mdi/js'
     import LoginPage from '../components/LoginPage.vue'
@@ -63,12 +63,10 @@
         components: {LoginPage, RegisterPage},
         data() {
             return {
-                // profile: profile,
-
                 logoutBtn: mdiLogout,
                 loginBtn: mdiLogin,
                 registerBtn: mdiAccountPlusOutline,
-                homeBtn: mdiHome,
+                listBtn: mdiFormatListBulleted,
                 refreshBtn: mdiRefresh,
                 isLogin: frontendData.isLoginForm,
                 isRegister: frontendData.isRegisterForm,
@@ -82,6 +80,7 @@
             showProfile() {
                 this.$router.push('/profile')
             },
+
             loginPage: function () {
                 if (!this.isLogin) {
                     this.isLogin = true

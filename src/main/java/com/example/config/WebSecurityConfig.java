@@ -30,7 +30,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         http
                 .authorizeRequests()//Авторизовывать все запросы, кроме указанных ниже
                 .mvcMatchers("/", "/registration",  "/static/**", "/activate/*"
-                        , "/login**", "/js/**", "/error**", "/panel**", "/check**").permitAll()
+                        , "/login**", "/js/**", "/error**").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .formLogin()

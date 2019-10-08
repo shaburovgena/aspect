@@ -49,7 +49,6 @@ public class UserService implements UserDetailsService {
 
     public User addUser(User user) {
         User userFromDb = userRepo.findByUsername(user.getUsername());
-        System.out.println(user.getUsername());
         if (userFromDb != null) {
             return null;
         }
@@ -129,7 +128,6 @@ public class UserService implements UserDetailsService {
 
         //Если менялся адрес почты перевысылаем код активации
         userRepo.save(user);
-
         return user;
     }
 }

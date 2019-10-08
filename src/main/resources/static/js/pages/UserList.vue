@@ -46,7 +46,8 @@
         methods: {
             editUser(user) {
                 this.user = user
-            }
+            },
+
 
         }
     }

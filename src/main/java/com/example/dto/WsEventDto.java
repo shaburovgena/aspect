@@ -8,7 +8,6 @@ import com.fasterxml.jackson.annotation.JsonView;
 public class WsEventDto {
     private ObjectType objectType;
     private EventType eventType;
-    //Встраивание строки в json, чтобы в json не попал еще один json
     @JsonRawValue
     private String body;
 

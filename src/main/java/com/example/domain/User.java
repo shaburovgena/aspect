@@ -27,9 +27,6 @@ public class User implements Serializable, UserDetails {
     private String phone;
     @JsonView(Views.FullProfile.class)
     private String address;
-//    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
-//    @JsonView(Views.FullProfile.class)
-//    private LocalDateTime lastVisit;
     @JsonView(Views.FullProfilePassw.class)
     private String activationCode;
     @JsonView(Views.FullProfilePassw.class)

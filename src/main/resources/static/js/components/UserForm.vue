@@ -1,25 +1,25 @@
 <template>
-        <v-container @keyup.enter="save">
-            <v-text-field solo placeholder="Write username"
-                          v-model="username"
-                          :rules="[rules.nameRules, rules.nameLengthRules ]"></v-text-field>
-            <v-text-field solo placeholder="Write password"
-                          type="password" v-model="password"
-                          :rules="[rules.passwordLength]" counter></v-text-field>
-            <v-text-field solo placeholder="Confirm password"
-                          type="password" v-model="passwordConfirm"
-                          :rules="[rules.passwordLength, passwordConfirmationRule]" counter></v-text-field>
-            <v-text-field solo placeholder="Write email"
-                          v-model="email"
-                          :rules="[rules.emailCheck, rules.emailRules]"></v-text-field>
-            <v-text-field solo placeholder="Write full name"
-                          v-model="fullName"></v-text-field>
-            <v-text-field solo placeholder="Write phone" v-model="phone"></v-text-field>
-            <v-text-field  solo placeholder="Write address" v-model="address"></v-text-field>
-            <v-btn @click="save" :disabled="!this.isValid">
-                <v-icon>{{saveBtn}}</v-icon>
-            </v-btn>
-        </v-container>
+    <v-container @keyup.enter="save">
+        <v-text-field solo placeholder="Write username"
+                      v-model="username"
+                      :rules="[rules.nameRules, rules.nameLengthRules ]" conuter></v-text-field>
+        <v-text-field solo placeholder="Write password"
+                      type="password" v-model="password"
+                      :rules="[rules.passwordLength]" counter></v-text-field>
+        <v-text-field solo placeholder="Confirm password"
+                      type="password" v-model="passwordConfirm"
+                      :rules="[rules.passwordLength, passwordConfirmationRule]" counter></v-text-field>
+        <v-text-field solo placeholder="Write email"
+                      v-model="email"
+                      :rules="[rules.emailCheck, rules.emailRules]"></v-text-field>
+        <v-text-field solo placeholder="Write full name"
+                      v-model="fullName"></v-text-field>
+        <v-text-field solo placeholder="Write phone" v-model="phone"></v-text-field>
+        <v-text-field solo placeholder="Write address" v-model="address"></v-text-field>
+        <v-btn @click="save" :disabled="!this.isValid">
+            <v-icon>{{saveBtn}}</v-icon>
+        </v-btn>
+    </v-container>
 
 </template>
 
@@ -42,41 +42,42 @@
                 saveBtn: mdiContentSave,
                 rules: {
                     passwordLength: v => (v && v.length >= 8) || 'Min 8 characters',
-                    nameLengthRules: v => (v && v.length <= 10) || 'Name must be less than 10 characters',
+                    nameLengthRules: v => (v && v.length <= 15) || 'Name must be less than 15 characters',
                     nameRules: v => !!v || 'Enter username',
                     emailRules: v => /.+@.+\..+/.test(v) || 'E-mail must be valid, email@example.com',
                     emailCheck: v => !!v || 'Enter e-mail',
                 }
             }
-        },computed: {
+        }, computed: {
             passwordConfirmationRule() {
                 return () => (this.password === this.passwordConfirm) || 'Passwords must match'
             },
-            isValid(){
-                if(this.isUsernameValid){
+            isValid() {
+                if (this.isUsernameValid && this.isPasswordValid) {
                     return true;
-                }else {
+                } else {
                     return false;
                 }
             },
-            isUsernameValid(){
-                if(this.username.length<=10&&this.username.length>0)return true
+            isPasswordValid() {
+                if (this.password === this.passwordConfirm)
+                    return true
             },
-        // isPasswordValid(){
-        //         if(this.password.length>7&&this.password === this.passwordConfirm)return true
-        //     }
+            isUsernameValid() {
+                if (this.username.length <= 15 && this.username.length > 0) return true
+            },
+
         },
         watch: {
             userAttr(newVal) {
                 this.username = newVal.username
                 this.fullName = newVal.fullName
                 this.id = newVal.id
-                this.password = newVal.password
-                this.passwordConfirm = newVal.passwordConfirm
                 this.email = newVal.email
                 this.address = newVal.address
                 this.phone = newVal.phone
-            }
+            },
+
         },
         methods: {
             ...mapActions(['addUserAction', 'updateUserAction']),
