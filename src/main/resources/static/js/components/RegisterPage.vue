@@ -3,6 +3,7 @@
         <form class="form" action="/registration" method="post">
             <v-content>
                 <v-layout column wrap>
+
                     <v-text-field
                             name="username"
                             autofocus solo type="text"
@@ -50,6 +51,7 @@
         name: "RegisterPage",
         data() {
             return {
+
                 password: '',
                 passwordConfirm: '',
                 username: '',

@@ -5,7 +5,8 @@
                 <div class="title mb-3">User profile</div>
                 <v-layout row justify-space-between>
                     <v-flex>
-                    <v-img :src="profile.userpic"></v-img>
+                        <v-img v-if="profile.userpic" :src="profile.userpic"></v-img>
+                        <v-img v-else><v-icon>{{accountIcon}}</v-icon></v-img>
                     </v-flex>
                     <v-flex class="px-1">
                         <v-layout column>
@@ -25,10 +26,16 @@
 
 <script>
     import {mapState} from 'vuex'
+    import {mdiAccountBox} from '@mdi/js'
 
     export default {
         name: "Profile",
-        computed: mapState(['profile'])
+        computed: mapState(['profile']),
+        data() {
+            return {
+                accountIcon: mdiAccountBox,
+            }
+        }
     }
 </script>
 
@@ -37,4 +44,5 @@
         max-width: 100%;
         height: auto;
     }
+
 </style>

@@ -1,4 +1,4 @@
-package com.example.restController;
+package com.example.controller;
 
 import com.example.domain.User;
 import com.example.domain.Views;
@@ -44,7 +44,6 @@ public class UserListController {
     @PostMapping
     public User create(@RequestBody User user) {
         User updatedUser = userService.addUser(user);
-//        User updatedUser = userRepo.save(user);
         wsSender.accept(EventType.CREATE, updatedUser);
         return updatedUser;
     }

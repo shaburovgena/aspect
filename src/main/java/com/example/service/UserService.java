@@ -22,7 +22,7 @@ public class UserService implements UserDetailsService {
     //Аналог конструктора с переданным параметром userRepo
     private final UserRepo userRepo;
 
-    private final MailSender mailSender;
+    private final MailService mailService;
 
     private final PasswordEncoder passwordEncoder;
 
@@ -30,14 +30,14 @@ public class UserService implements UserDetailsService {
     private String serverAddress;
 
     @Autowired
-    public UserService(UserRepo userRepo, MailSender mailSender, PasswordEncoder passwordEncoder) {
+    public UserService(UserRepo userRepo, MailService mailService, PasswordEncoder passwordEncoder) {
         this.userRepo = userRepo;
-        this.mailSender = mailSender;
+        this.mailService = mailService;
         this.passwordEncoder = passwordEncoder;
     }
 
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+    public UserDetails loadUserByUsername(String username)  {
         User user = userRepo.findByUsername(username);
 
         if (user == null) {
@@ -52,25 +52,15 @@ public class UserService implements UserDetailsService {
         if (userFromDb != null) {
             return null;
         }
-
         //Указываем что пользователь активен
         user.setActive(true);
-
         //Устанавливаем роль УЗ USER через Set так как ролей может быть несколько
         user.setRoles(Collections.singleton(Role.USER));
-
-
-
         //Генерируем код активации
         String activationCode = UUID.randomUUID().toString();
         user.setActivationCode(activationCode);
-
-        //Шифруем пароль
         user.setPassword(passwordEncoder.encode(user.getPassword()));
-        sendMessage(user);
-        //Сохраняем пользователя в базе
         userRepo.save(user);
-        //Если поле mail не пустое отправить код активации
         sendMessage(user);
         return user;
     }
@@ -80,8 +70,7 @@ public class UserService implements UserDetailsService {
             String message = String.format("Hello, %s! \n" +
                             "Verify your account link: " + serverAddress + "activate/%s",
                     user.getUsername(), user.getActivationCode());
-//            mailSender.send(user.getEmail(), "Activation code", message);//Отправляем сообщение
-            System.out.println(message);
+            mailService.send(user.getEmail(), "Activation code", message);//Отправляем сообщение
         }
     }
 
@@ -103,12 +92,11 @@ public class UserService implements UserDetailsService {
         boolean isEmailChanged = (email != null && !email.equals(currentUserEmail) ||
                 currentUserEmail != null && !currentUserEmail.equals(email));
 
-        if (isEmailChanged) {
-            if (!StringUtils.isEmpty(email)) {
+        if (isEmailChanged&&!StringUtils.isEmpty(email)) {
+
                 user.setEmail(email);
                 user.setActivationCode(UUID.randomUUID().toString());
                 sendMessage(user);
-            }
         }
         if (!StringUtils.isEmpty(username)) {
             user.setUsername(username);

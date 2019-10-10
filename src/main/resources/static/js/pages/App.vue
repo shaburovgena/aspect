@@ -11,14 +11,16 @@
             </v-btn>
             <v-spacer></v-spacer>
             <div v-if="profile">
-                <v-btn icon :disabled="$route.path === '/profile'" @click="showProfile">
+                <v-title >{{message}}</v-title>
+                <v-title  :disabled="$route.path === '/profile'" @click="showProfile">
                     {{profile.username}}
-                </v-btn>
+                </v-title>
                 <v-btn icon href="/logout">
                     <v-icon>{{logoutBtn}}</v-icon>
                 </v-btn>
             </div>
             <div v-else>
+                <v-title >{{message}}</v-title>
                 <v-btn icon @click="loginPage">
                     <v-icon>{{loginBtn}}</v-icon>
                 </v-btn>
@@ -63,6 +65,7 @@
         components: {LoginPage, RegisterPage},
         data() {
             return {
+                message: frontendData.message,
                 logoutBtn: mdiLogout,
                 loginBtn: mdiLogin,
                 registerBtn: mdiAccountPlusOutline,

@@ -6,15 +6,16 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
-//Класс будет просканирован как компонент Spring и помещен в контекст приложения
-//Аннотация для того чтобы spring создал этот класс автоматически без вызова из кода
+/**
+ *
+ */
 @Service
-public class MailSender {
+public class MailService {
 
     private final JavaMailSender mailSender;
 
     @Autowired
-    public MailSender(JavaMailSender mailSender) {
+    public MailService(JavaMailSender mailSender) {
         this.mailSender = mailSender;
     }
 
@@ -22,13 +23,11 @@ public class MailSender {
     @Async
     public void send(String emailTo, String subject, String message) {
         SimpleMailMessage mailMessage = new SimpleMailMessage();
-
-        mailMessage.setFrom("shaburovgena@yandex.ru");
+        mailMessage.setFrom("aspect-test@yandex.ru");
         mailMessage.setTo(emailTo);
         mailMessage.setSubject(subject);
         mailMessage.setText(message);
-
-
-        mailSender.send(mailMessage);
+//        mailSender.send(mailMessage);
+        System.out.println(mailMessage);
     }
 }

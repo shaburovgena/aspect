@@ -34,7 +34,6 @@
         name: "LoginPage",
         data() {
             return {
-
                 checkUsername: '',
 
             }
@@ -42,7 +41,8 @@
         computed: {
             usernameEmpty() {
                 return v => !!v || 'Enter username'
-            }
+            },
+
         }
     }
 </script>

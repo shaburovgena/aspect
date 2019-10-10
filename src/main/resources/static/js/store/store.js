@@ -9,7 +9,8 @@ export default new Vuex.Store({
 
     state: {
         users: users,
-        profile: profile
+        profile: profile,
+        message: frontendData.message,
     },
     getters: {
         sortedUsers: state =>

@@ -10,6 +10,10 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.crypto.password.PasswordEncoder;
 import com.example.service.UserService;
 
+/**
+ * Класс конфигурации безопасности веб приложения.
+ */
+
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
@@ -24,11 +28,18 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         this.passwordEncoder = passwordEncoder;
     }
 
-
+    /**
+     * Конфигурация безопасности http запросов.
+     * Разрешает неавторизованные запросы к URI "/", "/registration",  "/static/**", "/activate/*", "/login**", "/js/**", "/error**"
+     * Добавляет форму авторизации Spring Security, резолвится в {@link MvcConfig}
+     *
+     * @param http
+     * @throws Exception
+     */
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
-                .authorizeRequests()//Авторизовывать все запросы, кроме указанных ниже
+                .authorizeRequests()
                 .mvcMatchers("/", "/registration",  "/static/**", "/activate/*"
                         , "/login**", "/js/**", "/error**").permitAll()
                 .anyRequest().authenticated()
@@ -44,9 +55,14 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .csrf().disable();
     }
 
+    /**
+     * Добавляет функционал шифрования паролей при авторизации пользователей
+     * {@link  EncryptionConfig#getPasswordEncoder()}
+     * @param auth
+     * @throws Exception
+     */
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-
         auth.userDetailsService(userService)
                 .passwordEncoder(passwordEncoder);
     }

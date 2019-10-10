@@ -8,6 +8,10 @@ import org.springframework.mail.javamail.JavaMailSenderImpl;
 
 import java.util.Properties;
 
+/**
+ * Класс конфигурации почтового сервиса. Значения полей описаны в
+ * @sourcepath application.properties
+ */
 @Configuration
 public class MailConfig {
     @Value("${spring.mail.host}")

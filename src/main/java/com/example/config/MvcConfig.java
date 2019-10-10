@@ -7,6 +7,10 @@ import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
+/**
+ * Класс конфигурации MVC
+ */
+
 @Configuration
 public class MvcConfig implements WebMvcConfigurer {
 
@@ -17,13 +21,21 @@ public class MvcConfig implements WebMvcConfigurer {
         return new RestTemplate();
     }
 
+    /**
+     * Доавляет маппинг для страницы авторизации
+     * @param registry
+     */
+    @Override
     public void addViewControllers(ViewControllerRegistry registry) {
         registry.addViewController("/login").setViewName("index");
     }
 
+    /**
+     * Добавляет пакет с ресурсами
+     * @param registry
+     */
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
-
         registry.addResourceHandler("/static/**")
                 .addResourceLocations("classpath:/static/");
     }

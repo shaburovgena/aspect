@@ -7,7 +7,6 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -16,12 +15,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.HashMap;
 
+/**
+ * Класс-контроллер для основной страницы веб-приложения
+ */
+
 @Controller
 @RequestMapping("/")
 public class MainController {
 
-    @Value("${spring.profiles.active}")
-    private String profile;
+
     private final ObjectWriter usersWriter;
     private final ObjectWriter profileWriter;
     private final UserRepo userRepo;
@@ -35,11 +37,19 @@ public class MainController {
 
         this.profileWriter = objectMapper
                 .writerWithView(Views.FullProfile.class);
- this.usersWriter = objectMapper
+        this.usersWriter = objectMapper
                 .writerWithView(Views.FullProfile.class);
 
     }
 
+    /**
+     * Основная страница для авторизованных пользователей выдается с информацией о текущем профиле и
+     * всех данных, хранящихся в БД
+     * @param model
+     * @param user
+     * @return
+     * @throws JsonProcessingException
+     */
     @GetMapping
     public String main(
             Model model,
@@ -49,17 +59,16 @@ public class MainController {
         if (user != null) {
             model.addAttribute("profile", profileWriter.writeValueAsString(user));
             model.addAttribute("users", usersWriter.writeValueAsString(userRepo.findAll()));
-            data.put("message", "Hello");
+            data.put("message", "Hello, ");
             model.addAttribute("frontendData", data);
         } else {
             model.addAttribute("profile", "null");
             model.addAttribute("users", "[]");
-            data.put("message", "Login please");
+            data.put("message", "Sign in or Sign up please");
             data.put("isLoginForm", "true");
             model.addAttribute("frontendData", data);
         }
 
-        model.addAttribute("isDevMode", "dev".equals(profile));
         return "index";
     }
 
