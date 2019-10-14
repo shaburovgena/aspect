@@ -15,11 +15,13 @@ import org.springframework.util.StringUtils;
 import java.util.Collections;
 import java.util.UUID;
 
-//Класс будет просканирован как компонент Spring и помещен в контекст приложения
-@Service
-public class UserService implements UserDetailsService {
+/**
+ * Класс сервис для работы с объектом User
+ */
 
-    //Аналог конструктора с переданным параметром userRepo
+@Service
+public class UserService implements UserDetailsService{
+
     private final UserRepo userRepo;
 
     private final MailService mailService;
@@ -47,6 +49,13 @@ public class UserService implements UserDetailsService {
         return user;
     }
 
+    /**
+     * Добавление нового пользователя,
+     * установка роли USER для дальнейшего разделения пользовательских УЗ и привилегированных,
+     * генерация кода активации для подтверждения почтового ящика
+     * @param user
+     * @return
+     */
     public User addUser(User user) {
         User userFromDb = userRepo.findByUsername(user.getUsername());
         if (userFromDb != null) {
@@ -54,7 +63,7 @@ public class UserService implements UserDetailsService {
         }
         //Указываем что пользователь активен
         user.setActive(true);
-        //Устанавливаем роль УЗ USER через Set так как ролей может быть несколько
+        //Устанавливаем роль УЗ USER, ролей может быть несколько
         user.setRoles(Collections.singleton(Role.USER));
         //Генерируем код активации
         String activationCode = UUID.randomUUID().toString();
@@ -65,6 +74,11 @@ public class UserService implements UserDetailsService {
         return user;
     }
 
+    /**
+     * Отправка кода активации на почтовый ящик пользователя
+     * {@link  MailService#send(String, String, String)} ()}
+     * @param user
+     */
     private void sendMessage(User user) {
         if (!StringUtils.isEmpty(user.getEmail())) {//Если строка адреса не пустая
             String message = String.format("Hello, %s! \n" +
@@ -74,6 +88,11 @@ public class UserService implements UserDetailsService {
         }
     }
 
+    /**
+     * Активация учетной записи пользователя
+     * @param code
+     * @return
+     */
     public boolean activateUser(String code) {
         User user = userRepo.findByActivationCode(code);
 
@@ -85,7 +104,19 @@ public class UserService implements UserDetailsService {
         return true;
     }
 
-
+    /**
+     * Обновление данных пользователя.
+     * Если поля ввода не пустые, обновляем данные пользователя.
+     * Если менялся адрес почты, перевысылаем код активации для подтверждения
+     * @param user
+     * @param username
+     * @param password
+     * @param email
+     * @param fullName
+     * @param address
+     * @param phone
+     * @return
+     */
     public User updateUser(User user,String username, String password, String email, String fullName, String address, String phone) {
         String currentUserEmail = user.getEmail();
 
@@ -93,7 +124,6 @@ public class UserService implements UserDetailsService {
                 currentUserEmail != null && !currentUserEmail.equals(email));
 
         if (isEmailChanged&&!StringUtils.isEmpty(email)) {
-
                 user.setEmail(email);
                 user.setActivationCode(UUID.randomUUID().toString());
                 sendMessage(user);
@@ -114,7 +144,6 @@ public class UserService implements UserDetailsService {
             user.setPhone(phone);
         }
 
-        //Если менялся адрес почты перевысылаем код активации
         userRepo.save(user);
         return user;
     }

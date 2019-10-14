@@ -11,21 +11,22 @@ import org.springframework.boot.ApplicationRunner;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
-
+/**
+ * Класс загрузки исходных данных после старта приложения
+ * используется API сервиса randomuser.me
+ */
 @Component
 public class DataLoader implements ApplicationRunner {
     private static String url = "https://randomuser.me/api/?results=20";
     private final UserService userService;
     private final UserRepo userRepo;
     private final RestTemplate restTemplate;
-    private final PasswordEncoder passwordEncoder;
 
     @Autowired
     public DataLoader(UserService userService, UserRepo userRepo, RestTemplate restTemplate, PasswordEncoder passwordEncoder) {
         this.userService = userService;
         this.userRepo = userRepo;
         this.restTemplate = restTemplate;
-        this.passwordEncoder = passwordEncoder;
     }
 
     public void run(ApplicationArguments args) {

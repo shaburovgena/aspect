@@ -7,7 +7,7 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 /**
- *
+ * Класс сервис, определяющий поля письма
  */
 @Service
 public class MailService {
@@ -19,7 +19,6 @@ public class MailService {
         this.mailSender = mailSender;
     }
 
-    //Метод будет асинхронно запущен в отдельном потоке
     @Async
     public void send(String emailTo, String subject, String message) {
         SimpleMailMessage mailMessage = new SimpleMailMessage();
@@ -27,7 +26,7 @@ public class MailService {
         mailMessage.setTo(emailTo);
         mailMessage.setSubject(subject);
         mailMessage.setText(message);
-//        mailSender.send(mailMessage);
-        System.out.println(mailMessage);
+//        mailSender.send(mailMessage); Почтовый ящик был заблочен за спам
+        System.out.println(mailMessage); //Письмо с кодом активации выводится в консоль
     }
 }

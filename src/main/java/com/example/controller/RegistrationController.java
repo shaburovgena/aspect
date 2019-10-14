@@ -14,6 +14,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import javax.validation.Valid;
 import java.util.HashMap;
 
+/**
+ * Класс-контроллер, реализующий функционал регистрации и активации аккаунта на сервере
+ */
 @Controller
 public class RegistrationController {
 

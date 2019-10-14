@@ -11,6 +11,9 @@ import org.springframework.stereotype.Component;
 
 import java.util.function.BiConsumer;
 
+/**
+ * Класс, описывающий рассылку событий подписчикам-клиентам веб-сокета
+ */
 
 @Component
 public class WsSender {

@@ -10,8 +10,11 @@ import com.example.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 import java.util.function.BiConsumer;
+
+/**
+ * Класс контроллер, реализующий REST API сервера, для взамодействия с доменными объектами
+ */
 
 @RestController
 @RequestMapping("userList")
@@ -30,15 +33,6 @@ public class UserListController {
     }
 
 
-    @GetMapping
-    public List<User> list() {
-        return userRepo.findAll();
-    }
-
-    @GetMapping("{id}")
-    public User getOne(@PathVariable("id") User user) {
-        return user;
-    }
 
 
     @PostMapping

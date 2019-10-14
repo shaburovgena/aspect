@@ -4,7 +4,6 @@ const path = require('path');
 const VueLoaderPlugin = require('vue-loader/lib/plugin');
 
 module.exports = {
-    //Режим разработки, заменить перед деплоем
     mode: 'development',
     devtool: 'source-map',
     //Сборка проекта будет начинаться с указанных файлов
