@@ -44,6 +44,7 @@ public class User implements Serializable, UserDetails {
     @Enumerated(EnumType.STRING)
     private Set<Role> roles;
 
+
     @Override
     public boolean isAccountNonExpired() {
         return true;

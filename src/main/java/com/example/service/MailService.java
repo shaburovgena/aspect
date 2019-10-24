@@ -26,7 +26,7 @@ public class MailService {
         mailMessage.setTo(emailTo);
         mailMessage.setSubject(subject);
         mailMessage.setText(message);
-//        mailSender.send(mailMessage); Почтовый ящик был заблочен за спам
+//        mailSender.send(mailMessage); //Почтовый ящик был заблочен за спам
         System.out.println(mailMessage); //Письмо с кодом активации выводится в консоль
     }
 }

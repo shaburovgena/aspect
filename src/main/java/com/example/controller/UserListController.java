@@ -10,6 +10,7 @@ import com.example.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.function.BiConsumer;
 
 /**
@@ -33,7 +34,15 @@ public class UserListController {
     }
 
 
+    @GetMapping
+    public List<User> getAll() {
+        return userRepo.findAll();
+    }
 
+    @GetMapping("{id}")
+    public User getOne(@PathVariable("id") User user) {
+        return user;
+    }
 
     @PostMapping
     public User create(@RequestBody User user) {
@@ -48,8 +57,8 @@ public class UserListController {
             @RequestBody User user
     ) {
 
-        User updatedUser = userService.updateUser(userFromDb,user.getUsername(), user.getPassword(), user.getEmail(),
-                user.getFullName(),user.getAddress(),user.getPhone());
+        User updatedUser = userService.updateUser(userFromDb, user.getUsername(), user.getPassword(), user.getEmail(),
+                user.getFullName(), user.getAddress(), user.getPhone());
         wsSender.accept(EventType.UPDATE, updatedUser);
         return updatedUser;
     }
