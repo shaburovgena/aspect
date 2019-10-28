@@ -16,26 +16,27 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
 @SpringBootTest
 @AutoConfigureMockMvc
 @RunWith(SpringRunner.class)
 @TestPropertySource("/application-test.properties")
 
 public class LoginTest {
-@Autowired
+    @Autowired
     private MockMvc mockMvc;
-@Autowired
-private MainController mainController;
+    @Autowired
+    private MainController mainController;
 
     @Test
     public void contextLoads() throws Exception {
         this.mockMvc.perform(get("/"))
                 .andDo(print())
-        .andExpect(status().isOk());
+                .andExpect(status().isOk());
     }
 
     @Test
-    public void accessDenied() throws Exception{
+    public void accessDenied() throws Exception {
         this.mockMvc.perform(get("/userList"))
                 .andDo(print())
                 .andExpect(status().is3xxRedirection())
@@ -45,14 +46,14 @@ private MainController mainController;
     @Test
     @Sql(value = {"/create-user-before.sql"}, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
     @Sql(value = {"/create-user-after.sql"}, executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
-    public void correctLoginTest () throws Exception{
+    public void correctLoginTest() throws Exception {
         this.mockMvc.perform(formLogin().user("admin").password("1"))
                 .andDo(print())
                 .andExpect(status().isOk());
     }
 
     @Test
-    public void badCredentials () throws Exception {
+    public void badCredentials() throws Exception {
         this.mockMvc.perform(post("/login").param("user", "user123"))
                 .andDo(print())
                 .andExpect(status().isForbidden());

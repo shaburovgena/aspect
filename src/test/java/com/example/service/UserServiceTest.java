@@ -43,6 +43,14 @@ public class UserServiceTest {
 
 
     }
+ @Test(expected = NullPointerException.class)
+    public void addNullUserTest() {
+        User user = null;
+
+        User isUserAdded = userService.addUser(user);
+
+        Assert.assertNull(isUserAdded);
+    }
 
     @Test
     public void addExistUserTest() {
@@ -74,7 +82,8 @@ public class UserServiceTest {
 
 
     }
- @Test
+
+    @Test
     public void activateUserFailTest() {
         User user = new User();
         boolean isUserActivate = userService.activateUser("activate");
@@ -87,8 +96,8 @@ public class UserServiceTest {
     }
 
     @Test(expected = ArithmeticException.class)
-    public void errorExpected(){
+    public void errorExpected() {
         int i = 0;
-        int j = 10/i;
+        int j = 10 / i;
     }
 }
